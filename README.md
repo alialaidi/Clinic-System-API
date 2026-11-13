@@ -16,6 +16,7 @@ The API supports four account roles: Admin, Receptionist, Doctor, and Client. Ad
 
 ## Technology Stack
 
+<<<<<<< HEAD
 | Technology            | Verified implementation                                                         |
 | --------------------- | ------------------------------------------------------------------------------- |
 | C# / .NET             | .NET 8 (`net8.0`)                                                               |
@@ -29,6 +30,21 @@ The API supports four account roles: Admin, Receptionist, Doctor, and Client. Ad
 ## Architecture
 
 The solution file includes four projects. The API references Application and Infrastructure; Application references Domain; Infrastructure implements persistence against Domain and Application abstractions
+=======
+| Technology | Verified implementation |
+|---|---|
+| C# / .NET | .NET 8 (`net8.0`) |
+| ASP.NET Core | Web API, controller routing, authentication and authorization middleware |
+| Entity Framework Core | 8.0.0 |
+| Database provider | SQL Server (`Microsoft.EntityFrameworkCore.SqlServer` 8.0.0) |
+| Authentication | JWT Bearer; `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.31 |
+| API documentation | Swashbuckle.AspNetCore 6.6.2; Swagger UI enabled in Development |
+| Other | Built-in dependency injection, LINQ, asynchronous service/repository operations |
+
+## Architecture
+
+The solution file includes four projects. The API references Application and Infrastructure; Application references Domain; Infrastructure implements persistence against Domain and Application abstractions.
+>>>>>>> ec411c78faa56b3d70c06e75e36e7d688c6b151e
 
 ```mermaid
 flowchart LR
@@ -40,12 +56,21 @@ flowchart LR
     INF -. implements .-> DOM
 ```
 
+<<<<<<< HEAD
 | Project                            | Responsibility                                                                                                                       |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ClinicApplication.API`            | ASP.NET Core startup, controller endpoints, JWT issuance/validation, password hashing, Swagger configuration, HTTP response mapping. |
 | `ClinicApplication.Application`    | Use-case services and interfaces, DTOs, mapping extensions, and `Result` types for expected outcomes.                                |
 | `ClinicApplication.Domain`         | Clinic entities, appointment status enum, and repository contracts.                                                                  |
 | `ClinicApplication.Infrastructure` | EF Core `ClinicDbContext`, SQL Server configuration, repository implementations, and Unit of Work.                                   |
+=======
+| Project | Responsibility |
+|---|---|
+| `ClinicApplication.API` | ASP.NET Core startup, controller endpoints, JWT issuance/validation, password hashing, Swagger configuration, HTTP response mapping. |
+| `ClinicApplication.Application` | Use-case services and interfaces, DTOs, mapping extensions, and `Result` types for expected outcomes. |
+| `ClinicApplication.Domain` | Clinic entities, appointment status enum, and repository contracts. |
+| `ClinicApplication.Infrastructure` | EF Core `ClinicDbContext`, SQL Server configuration, repository implementations, and Unit of Work. |
+>>>>>>> ec411c78faa56b3d70c06e75e36e7d688c6b151e
 
 ## Implemented Features
 
@@ -64,6 +89,7 @@ No notification, reminder, reporting, payment gateway, or appointment booking by
 
 Permissions below reflect controller authorization attributes; service-level ownership checks further restrict some Doctor and Client requests.
 
+<<<<<<< HEAD
 | Role                   | Confirmed access                                                                                                                                                                                        |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Admin                  | Manage departments; create/update/move/activate doctors; create/update/activate receptionists; list doctors and departments.                                                                            |
@@ -71,11 +97,21 @@ Permissions below reflect controller authorization attributes; service-level own
 | Doctor                 | View own appointments, view only own appointment details, complete own appointments, create/update records for own appointments, prescribe against own records, and retrieve qualifying client history. |
 | Client                 | Read own profile, appointments, appointment details, medical records, and prescriptions.                                                                                                                |
 | Any authenticated role | Read departments, retrieve the authenticated account, and change its own password.                                                                                                                      |
+=======
+| Role | Confirmed access |
+|---|---|
+| Admin | Manage departments; create/update/move/activate doctors; create/update/activate receptionists; list doctors and departments. |
+| Receptionist | Manage client intake and client accounts; manage appointments; list doctors and appointments; record and view payments; list departments. |
+| Doctor | View own appointments, view only own appointment details, complete own appointments, create/update records for own appointments, prescribe against own records, and retrieve qualifying client history. |
+| Client | Read own profile, appointments, appointment details, medical records, and prescriptions. |
+| Any authenticated role | Read departments, retrieve the authenticated account, and change its own password. |
+>>>>>>> ec411c78faa56b3d70c06e75e36e7d688c6b151e
 
 ## API Reference
 
 All routes are relative to the API root. Controllers use `/api/[controller]`, except Payments (`/api/...`) and MedicalRecords (`/api/medical-records`). Every endpoint below is verified in the controllers.
 
+<<<<<<< HEAD
 | Method | Endpoint                                  | Description                                                                  | Required role        |
 | ------ | ----------------------------------------- | ---------------------------------------------------------------------------- | -------------------- |
 | POST   | `/api/auth/login`                         | Authenticate and issue a JWT.                                                | Anonymous            |
@@ -121,6 +157,53 @@ All routes are relative to the API root. Controllers use `/api/[controller]`, ex
 | GET    | `/api/me/appointments/{id}`               | Get an own appointment.                                                      | Client               |
 | GET    | `/api/me/medical-records`                 | List own medical records.                                                    | Client               |
 | GET    | `/api/me/prescriptions`                   | List own prescriptions and items.                                            | Client               |
+=======
+| Method | Endpoint | Description | Required role |
+|---|---|---|---|
+| POST | `/api/auth/login` | Authenticate and issue a JWT. | Anonymous |
+| POST | `/api/auth/change-password` | Change the authenticated user's password. | Authenticated |
+| GET | `/api/auth/me` | Retrieve authenticated account details. | Authenticated |
+| GET | `/api/departments` | List departments. | Authenticated |
+| POST | `/api/departments` | Create department. | Admin |
+| PUT | `/api/departments/{id}` | Update department. | Admin |
+| DELETE | `/api/departments/{id}` | Delete department if it has no doctors. | Admin |
+| POST | `/api/departments/{id}/transfer-doctors` | Transfer department doctors to another department. | Admin |
+| GET | `/api/doctors` | List doctors. | Admin, Receptionist |
+| GET | `/api/doctors/{id}` | Get doctor by ID. | Admin, Receptionist |
+| POST | `/api/doctors` | Register an existing Person as a doctor in a department. | Admin |
+| PUT | `/api/doctors/{id}` | Update doctor department/specialization. | Admin |
+| PUT | `/api/doctors/{id}/department` | Move doctor to another department. | Admin |
+| PATCH | `/api/doctors/{id}/status` | Activate/deactivate doctor. | Admin |
+| GET | `/api/doctors/me/appointments` | List own appointments; optional `date` and `status` filters. | Doctor |
+| GET | `/api/receptionists` | List receptionists. | Admin |
+| POST | `/api/receptionists` | Register an existing Person as a receptionist. | Admin |
+| PUT | `/api/receptionists/{id}` | Update receptionist personal details. | Admin |
+| PATCH | `/api/receptionists/{id}/status` | Activate/deactivate receptionist account. | Admin |
+| GET | `/api/clients` | List clients. | Receptionist |
+| GET | `/api/clients/{id}` | Get client by ID. | Receptionist |
+| GET | `/api/clients/by-code/{clientCode}` | Get client by client code. | Receptionist |
+| POST | `/api/clients` | Register client and linked account; returns generated temporary credentials. | Receptionist |
+| PUT | `/api/clients/{id}` | Update client personal details. | Receptionist |
+| POST | `/api/clients/{id}/reset-password` | Generate a replacement temporary password. | Receptionist |
+| GET | `/api/clients/{id}/history` | Get visits, records, and prescriptions if this doctor has seen the client. | Doctor |
+| GET | `/api/appointments` | List appointments ordered by date/time. | Receptionist |
+| GET | `/api/appointments/{id}` | Get appointment; a doctor is limited to their own. | Receptionist, Doctor |
+| POST | `/api/appointments` | Create appointment. | Receptionist |
+| PUT | `/api/appointments/{id}/postpone` | Change appointment time and record reason. | Receptionist |
+| PUT | `/api/appointments/{id}/cancel` | Cancel appointment. | Receptionist |
+| PUT | `/api/appointments/{id}/complete` | Complete own appointment. | Doctor |
+| POST | `/api/appointments/{id}/medical-record` | Create a record for own appointment. | Doctor |
+| PUT | `/api/medical-records/{id}` | Update own medical record. | Doctor |
+| POST | `/api/medical-records/{id}/prescriptions` | Add prescription and medication items to own record. | Doctor |
+| POST | `/api/appointments/{id}/payments` | Register payment against appointment. | Receptionist |
+| GET | `/api/appointments/{id}/payments` | List payments for appointment. | Receptionist |
+| GET | `/api/payments` | List all payments. | Receptionist |
+| GET | `/api/me/profile` | Get own client profile. | Client |
+| GET | `/api/me/appointments` | List own appointments. | Client |
+| GET | `/api/me/appointments/{id}` | Get an own appointment. | Client |
+| GET | `/api/me/medical-records` | List own medical records. | Client |
+| GET | `/api/me/prescriptions` | List own prescriptions and items. | Client |
+>>>>>>> ec411c78faa56b3d70c06e75e36e7d688c6b151e
 
 ## Database Overview
 
@@ -242,3 +325,7 @@ See [docs/PROJECT_FLOW.md](docs/PROJECT_FLOW.md) for a scenario-driven explanati
 - **Current version:** v1.0.0
 - **Status:** Initial release / ongoing development
 - **Future enhancements:** Under consideration; the project is expected to evolve over time.
+<<<<<<< HEAD
+=======
+
+>>>>>>> ec411c78faa56b3d70c06e75e36e7d688c6b151e
