@@ -1,9 +1,11 @@
 using ClinicApplication.Application.Common;
 using ClinicApplication.Application.DTOs.Appointments;
 using ClinicApplication.Application.DTOs.MedicalRecords;
+using ClinicApplication.Application.DTOs.Payments;
 using ClinicApplication.Application.Interfaces.Services;
 using ClinicApplication.Application.Mappings.Appointments;
 using ClinicApplication.Application.Mappings.MedicalRecords;
+using ClinicApplication.Application.Mappings.Payments;
 using ClinicApplication.Domain.Entities;
 using ClinicApplication.Domain.Enums;
 using ClinicApplication.Domain.Interfaces.Repositories;
@@ -182,6 +184,33 @@ public class AppointmentService : IAppointmentService
         await _unitOfWork.CommitAsync();
 
         return Result.Success(medicalRecord.Id);
+    }
+
+    public async Task<Result> CreatePaymentAsync(int appointmentId, CreatePaymentDTO createPaymentDTO)
+    {
+        if (!await _appointmentRepository.AppointmentExistsAsync(appointmentId))
+            return Result.NotFound("The appointment was not found");
+
+        var payment = createPaymentDTO.ToEntity(appointmentId);
+        await _appointmentRepository.CreatePaymentAsync(payment);
+        await _unitOfWork.CommitAsync();
+
+        return Result.Success(payment.Id);
+    }
+
+    public async Task<Result<List<PaymentDTO>>> GetPaymentsByAppointmentIdAsync(int appointmentId)
+    {
+        if (!await _appointmentRepository.AppointmentExistsAsync(appointmentId))
+            return Result<List<PaymentDTO>>.NotFound("The appointment was not found");
+
+        var payments = await _appointmentRepository.GetPaymentsByAppointmentIdAsync(appointmentId);
+        return Result<List<PaymentDTO>>.Success(payments.Select(payment => payment.ToDTO()).ToList());
+    }
+
+    public async Task<List<PaymentDTO>> GetAllPaymentsAsync()
+    {
+        var payments = await _appointmentRepository.GetAllPaymentsAsync();
+        return payments.Select(payment => payment.ToDTO()).ToList();
     }
 
     private static bool IsScheduledOrPostponed(byte status)

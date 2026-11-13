@@ -1,0 +1,16 @@
+namespace ClinicApplication.Application.DTOs.Payments;
+
+public class PaymentDTO
+{
+    public int Id { get; set; }
+
+    public int AppointmentId { get; set; }
+
+    public decimal Amount { get; set; }
+
+    public string PaymentMethod { get; set; } = string.Empty;
+
+    public DateTime PaymentDate { get; set; }
+
+    public string? Notes { get; set; }
+}

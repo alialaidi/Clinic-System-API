@@ -1,6 +1,7 @@
 using ClinicApplication.Application.Common;
 using ClinicApplication.Application.DTOs.Appointments;
 using ClinicApplication.Application.DTOs.MedicalRecords;
+using ClinicApplication.Application.DTOs.Payments;
 
 namespace ClinicApplication.Application.Interfaces.Services;
 
@@ -13,4 +14,7 @@ public interface IAppointmentService
     Task<Result> CancelAppointmentAsync(int appointmentId, int userId);
     Task<Result> CompleteAppointmentAsync(int appointmentId, int userId);
     Task<Result> CreateMedicalRecordAsync(int appointmentId, CreateMedicalRecordDTO createMedicalRecordDTO, int userId);
+    Task<Result> CreatePaymentAsync(int appointmentId, CreatePaymentDTO createPaymentDTO);
+    Task<Result<List<PaymentDTO>>> GetPaymentsByAppointmentIdAsync(int appointmentId);
+    Task<List<PaymentDTO>> GetAllPaymentsAsync();
 }

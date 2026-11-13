@@ -78,6 +78,26 @@ public class AppointmentRepository : IAppointmentRepository
             .Include(a => a.MedicalRecord)
             .FirstOrDefaultAsync(a => a.Id == appointmentId && a.DoctorId == doctorId);
 
+    public Task<bool> AppointmentExistsAsync(int appointmentId)
+        => _context.Appointments.AnyAsync(a => a.Id == appointmentId);
+
+    public Task<List<Payment>> GetAllPaymentsAsync()
+        => _context.Payments
+            .AsNoTracking()
+            .ToListAsync();
+
+    public Task<List<Payment>> GetPaymentsByAppointmentIdAsync(int appointmentId)
+        => _context.Payments
+            .AsNoTracking()
+            .Where(p => p.AppointmentId == appointmentId)
+            .ToListAsync();
+
+    public async Task<Payment> CreatePaymentAsync(Payment payment)
+    {
+        await _context.Payments.AddAsync(payment);
+        return payment;
+    }
+
     public async Task<MedicalRecord> CreateMedicalRecordAsync(MedicalRecord medicalRecord)
     {
         await _context.MedicalRecords.AddAsync(medicalRecord);
