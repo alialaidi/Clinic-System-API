@@ -14,7 +14,8 @@ public static class MedicalRecordMappings
             AppointmentId = appointmentId,
             VisitDescription = createMedicalRecordDTO.VisitDescription,
             Diagnosis = createMedicalRecordDTO.Diagnosis,
-            Notes = createMedicalRecordDTO.Notes
+            Notes = createMedicalRecordDTO.Notes,
+            PatientInstructions = createMedicalRecordDTO.PatientInstructions
         };
     }
 }

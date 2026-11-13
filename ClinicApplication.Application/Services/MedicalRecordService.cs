@@ -40,6 +40,7 @@ public class MedicalRecordService : IMedicalRecordService
         medicalRecord.VisitDescription = updateMedicalRecordDTO.VisitDescription;
         medicalRecord.Diagnosis = updateMedicalRecordDTO.Diagnosis;
         medicalRecord.Notes = updateMedicalRecordDTO.Notes;
+        medicalRecord.PatientInstructions = updateMedicalRecordDTO.PatientInstructions;
 
         await _unitOfWork.CommitAsync();
         return Result.Success();

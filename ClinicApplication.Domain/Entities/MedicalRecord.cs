@@ -15,6 +15,8 @@ public partial class MedicalRecord
 
     public string? Notes { get; set; }
 
+    public string? PatientInstructions { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public virtual Appointment Appointment { get; set; } = null!;

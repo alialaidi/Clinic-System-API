@@ -55,19 +55,9 @@ public static class ClientMappings
                         VisitDescription = appointment.MedicalRecord.VisitDescription,
                         Diagnosis = appointment.MedicalRecord.Diagnosis,
                         Notes = appointment.MedicalRecord.Notes,
-                        Prescriptions = appointment.MedicalRecord.Prescriptions.Select(prescription => new PrescriptionHistoryDTO
-                        {
-                            CreatedAt = prescription.CreatedAt,
-                            Items = prescription.PrescriptionItems.Select(item => new PrescriptionItemHistoryDTO
-                            {
-                                MedicationName = item.MedicationName,
-                                Dosage = item.Dosage,
-                                Frequency = item.Frequency,
-                                StartDate = item.StartDate,
-                                EndDate = item.EndDate,
-                                SpecialInstructions = item.SpecialInstructions
-                            }).ToList()
-                        }).ToList()
+                        Prescriptions = appointment.MedicalRecord.Prescriptions
+                            .Select(prescription => prescription.ToDTO())
+                            .ToList()
                     }
             }).ToList()
         };
@@ -95,6 +85,32 @@ public static class ClientMappings
         {
             ClientCode = clientCode,
             RegisteredBy = receptionistId
+        };
+    }
+
+    public static PrescriptionHistoryDTO ToDTO(this Prescription prescription)
+    {
+        ArgumentNullException.ThrowIfNull(prescription);
+
+        return new PrescriptionHistoryDTO
+        {
+            CreatedAt = prescription.CreatedAt,
+            Items = prescription.PrescriptionItems.Select(item => item.ToDTO()).ToList()
+        };
+    }
+
+    public static PrescriptionItemHistoryDTO ToDTO(this PrescriptionItem prescriptionItem)
+    {
+        ArgumentNullException.ThrowIfNull(prescriptionItem);
+
+        return new PrescriptionItemHistoryDTO
+        {
+            MedicationName = prescriptionItem.MedicationName,
+            Dosage = prescriptionItem.Dosage,
+            Frequency = prescriptionItem.Frequency,
+            StartDate = prescriptionItem.StartDate,
+            EndDate = prescriptionItem.EndDate,
+            SpecialInstructions = prescriptionItem.SpecialInstructions
         };
     }
 }

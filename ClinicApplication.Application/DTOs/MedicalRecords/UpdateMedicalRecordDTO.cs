@@ -12,4 +12,7 @@ public class UpdateMedicalRecordDTO
 
     [StringLength(1000)]
     public string? Notes { get; set; }
+
+    [StringLength(1000)]
+    public string? PatientInstructions { get; set; }
 }

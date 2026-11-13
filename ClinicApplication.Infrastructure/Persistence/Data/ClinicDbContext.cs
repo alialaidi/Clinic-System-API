@@ -197,6 +197,9 @@ public partial class ClinicDbContext : DbContext
             entity.Property(e => e.Notes)
                 .HasMaxLength(1000)
                 .HasColumnName("notes");
+            entity.Property(e => e.PatientInstructions)
+                .HasMaxLength(1000)
+                .HasColumnName("patient_instructions");
             entity.Property(e => e.VisitDescription)
                 .HasMaxLength(1000)
                 .HasColumnName("visit_description");

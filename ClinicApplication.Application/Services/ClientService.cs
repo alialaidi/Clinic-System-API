@@ -1,8 +1,10 @@
 using System.Security.Cryptography;
 using ClinicApplication.Application.Common;
 using ClinicApplication.Application.DTOs.Clients;
+using ClinicApplication.Application.DTOs.Appointments;
 using ClinicApplication.Application.Interfaces.Services;
 using ClinicApplication.Application.Mappings.Clients;
+using ClinicApplication.Application.Mappings.Appointments;
 using ClinicApplication.Domain.Entities;
 using ClinicApplication.Domain.Interfaces.Repositories;
 
@@ -81,6 +83,42 @@ public class ClientService : IClientService
     {
         var client = await _clientRepository.GetClientByIdAsync(clientId);
         return client?.ToDTO();
+    }
+
+    public async Task<Result<ClientDTO>> GetMyProfileAsync(int userId)
+    {
+        var client = await _clientRepository.GetClientByUserIdAsync(userId);
+        if (client is null)
+            return Result<ClientDTO>.NotFound("The client was not found");
+
+        return Result<ClientDTO>.Success(client.ToDTO());
+    }
+
+    public async Task<List<AppointmentDTO>> GetMyAppointmentsAsync(int userId)
+    {
+        var appointments = await _clientRepository.GetAppointmentsByUserIdAsync(userId);
+        return appointments.Select(appointment => appointment.ToDTO()).ToList();
+    }
+
+    public async Task<Result<AppointmentDTO>> GetMyAppointmentByIdAsync(int appointmentId, int userId)
+    {
+        var appointment = await _clientRepository.GetAppointmentByIdForUserAsync(appointmentId, userId);
+        if (appointment is null)
+            return Result<AppointmentDTO>.NotFound("The appointment was not found");
+
+        return Result<AppointmentDTO>.Success(appointment.ToDTO());
+    }
+
+    public async Task<List<ClientMedicalRecordDTO>> GetMyMedicalRecordsAsync(int userId)
+    {
+        var medicalRecords = await _clientRepository.GetMedicalRecordsByUserIdAsync(userId);
+        return medicalRecords.Select(medicalRecord => medicalRecord.ToClientDTO()).ToList();
+    }
+
+    public async Task<List<PrescriptionHistoryDTO>> GetMyPrescriptionsAsync(int userId)
+    {
+        var prescriptions = await _clientRepository.GetPrescriptionsByUserIdAsync(userId);
+        return prescriptions.Select(prescription => prescription.ToDTO()).ToList();
     }
     public async Task<List<ClientDTO>> GetAllClientsAsync()
     {
