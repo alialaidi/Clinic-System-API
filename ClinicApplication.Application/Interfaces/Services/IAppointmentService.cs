@@ -1,5 +1,6 @@
 using ClinicApplication.Application.Common;
 using ClinicApplication.Application.DTOs.Appointments;
+using ClinicApplication.Application.DTOs.MedicalRecords;
 
 namespace ClinicApplication.Application.Interfaces.Services;
 
@@ -11,4 +12,5 @@ public interface IAppointmentService
     Task<Result> PostponeAppointmentAsync(int appointmentId, PostponeAppointmentDTO request, int userId);
     Task<Result> CancelAppointmentAsync(int appointmentId, int userId);
     Task<Result> CompleteAppointmentAsync(int appointmentId, int userId);
+    Task<Result> CreateMedicalRecordAsync(int appointmentId, CreateMedicalRecordDTO createMedicalRecordDTO, int userId);
 }

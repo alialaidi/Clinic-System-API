@@ -73,6 +73,17 @@ public class AppointmentRepository : IAppointmentRepository
         => _context.Appointments
             .FirstOrDefaultAsync(a => a.Id == appointmentId && a.DoctorId == doctorId);
 
+    public Task<Appointment?> GetAppointmentForMedicalRecordAsync(int appointmentId, int doctorId)
+        => _context.Appointments
+            .Include(a => a.MedicalRecord)
+            .FirstOrDefaultAsync(a => a.Id == appointmentId && a.DoctorId == doctorId);
+
+    public async Task<MedicalRecord> CreateMedicalRecordAsync(MedicalRecord medicalRecord)
+    {
+        await _context.MedicalRecords.AddAsync(medicalRecord);
+        return medicalRecord;
+    }
+
     public async Task<bool> IsDoctorSlotAvailableAsync(int doctorId, DateTime appointmentDatetime)
         => !await _context.Appointments.AnyAsync(a =>
             a.DoctorId == doctorId &&

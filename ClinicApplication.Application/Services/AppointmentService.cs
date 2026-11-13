@@ -1,7 +1,9 @@
 using ClinicApplication.Application.Common;
 using ClinicApplication.Application.DTOs.Appointments;
+using ClinicApplication.Application.DTOs.MedicalRecords;
 using ClinicApplication.Application.Interfaces.Services;
 using ClinicApplication.Application.Mappings.Appointments;
+using ClinicApplication.Application.Mappings.MedicalRecords;
 using ClinicApplication.Domain.Entities;
 using ClinicApplication.Domain.Enums;
 using ClinicApplication.Domain.Interfaces.Repositories;
@@ -157,6 +159,29 @@ public class AppointmentService : IAppointmentService
 
         await _unitOfWork.CommitAsync();
         return Result.Success();
+    }
+
+    public async Task<Result> CreateMedicalRecordAsync(
+        int appointmentId,
+        CreateMedicalRecordDTO createMedicalRecordDTO,
+        int userId)
+    {
+        var doctorId = await _doctorRepository.GetDoctorIdByUserIdAsync(userId);
+        if (doctorId is null)
+            return Result.NotFound("The doctor was not found");
+
+        var appointment = await _appointmentRepository.GetAppointmentForMedicalRecordAsync(appointmentId, doctorId.Value);
+        if (appointment is null)
+            return Result.NotFound("The appointment was not found");
+
+        if (appointment.MedicalRecord is not null)
+            return Result.Conflict("A medical record already exists for this appointment.");
+
+        var medicalRecord = createMedicalRecordDTO.ToEntity(appointment.Id);
+        await _appointmentRepository.CreateMedicalRecordAsync(medicalRecord);
+        await _unitOfWork.CommitAsync();
+
+        return Result.Success(medicalRecord.Id);
     }
 
     private static bool IsScheduledOrPostponed(byte status)

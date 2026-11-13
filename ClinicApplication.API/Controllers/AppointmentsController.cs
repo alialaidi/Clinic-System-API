@@ -1,5 +1,6 @@
 using ClinicApplication.Application.Common;
 using ClinicApplication.Application.DTOs.Appointments;
+using ClinicApplication.Application.DTOs.MedicalRecords;
 using ClinicApplication.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -206,6 +207,42 @@ namespace ClinicApplication.API.Controllers
                 ResultStatus.Success => NoContent(),
                 ResultStatus.NotFound => Problem(statusCode: StatusCodes.Status404NotFound, title: "Appointment or doctor not found", detail: result.Message),
                 ResultStatus.Conflict => Problem(statusCode: StatusCodes.Status409Conflict, title: "Appointment cannot be completed", detail: result.Message),
+                _ => Problem(statusCode: StatusCodes.Status500InternalServerError, title: "Internal server error")
+            };
+        }
+
+
+        [HttpPost("{id:int}/medical-record")]
+        [EndpointName("CreateMedicalRecord")]
+        [Authorize(Roles = "Doctor")]
+        [EndpointSummary("Creates a medical record for an appointment.")]
+        [EndpointDescription("Creates a medical record for an appointment belonging to the authenticated doctor.")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateMedicalRecord(
+            [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue, ErrorMessage = "Appointment ID must be greater than zero.")] int id,
+            CreateMedicalRecordDTO createMedicalRecordDTO)
+        {
+            if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) || userId <= 0)
+            {
+                return Problem(
+                    statusCode: StatusCodes.Status401Unauthorized,
+                    title: "Invalid authenticated user",
+                    detail: "The authenticated doctor's user ID is missing or invalid.");
+            }
+
+            var result = await _appointmentService.CreateMedicalRecordAsync(id, createMedicalRecordDTO, userId);
+            return result.Status switch
+            {
+                ResultStatus.Success => StatusCode(StatusCodes.Status201Created, new { id = result.Id }),
+                ResultStatus.NotFound => Problem(statusCode: StatusCodes.Status404NotFound, title: "Appointment or doctor not found", detail: result.Message),
+                ResultStatus.BadRequest => Problem(statusCode: StatusCodes.Status400BadRequest, title: "Invalid medical record data", detail: result.Message),
+                ResultStatus.Conflict => Problem(statusCode: StatusCodes.Status409Conflict, title: "Medical record cannot be created", detail: result.Message),
                 _ => Problem(statusCode: StatusCodes.Status500InternalServerError, title: "Internal server error")
             };
         }

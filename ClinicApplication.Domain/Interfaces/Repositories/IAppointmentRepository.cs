@@ -13,6 +13,8 @@ public interface IAppointmentRepository
     Task<Appointment?> GetAppointmentByIdForDoctorAsync(int appointmentId, int doctorId);
     Task<Appointment?> GetAppointmentForUpdateAsync(int appointmentId);
     Task<Appointment?> GetAppointmentForUpdateByDoctorAsync(int appointmentId, int doctorId);
+    Task<Appointment?> GetAppointmentForMedicalRecordAsync(int appointmentId, int doctorId);
+    Task<MedicalRecord> CreateMedicalRecordAsync(MedicalRecord medicalRecord);
     Task<bool> IsDoctorSlotAvailableAsync(int doctorId, DateTime appointmentDatetime);
     Task<bool> IsDoctorSlotAvailableAsync(int doctorId, DateTime appointmentDatetime, int exceptAppointmentId);
 }
