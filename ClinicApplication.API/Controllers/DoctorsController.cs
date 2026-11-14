@@ -196,7 +196,7 @@ namespace ClinicApplication.API.Controllers
 
 
         [HttpGet("me/appointments")]
-        [EndpointName("GetMyAppointments")]
+        [EndpointName("GetDoctorAppointments")]
         [Authorize(Roles = "Doctor")]
         [EndpointSummary("Retrieves the appointments of the logged-in doctor.")]
         [EndpointDescription("Retrieves a list of appointments for the logged-in doctor, optionally filtered by date and status.")]

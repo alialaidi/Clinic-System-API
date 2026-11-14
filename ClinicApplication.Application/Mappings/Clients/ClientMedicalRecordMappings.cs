@@ -1,4 +1,5 @@
 using ClinicApplication.Domain.Entities;
+using ClinicApplication.Application.DTOs.Clients;
 
 namespace ClinicApplication.Application.Mappings.Clients;
 
