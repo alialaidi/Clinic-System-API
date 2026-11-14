@@ -1,0 +1,25 @@
+# ملفات البناء
+**/bin/
+**/obj/
+
+# إعدادات محلية وحساسة
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/secrets.json
+.env
+.env.*
+
+# ملفات Visual Studio وRider
+.vs/
+.idea/
+*.user
+*.suo
+
+# سجلات وملفات مؤقتة
+*.log
+*.tmp
+*.cache
+
+# ملفات النظام
+.DS_Store
+Thumbs.db

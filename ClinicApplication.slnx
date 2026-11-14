@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ClinicApplication.API/ClinicApplication.API.csproj" />
+  <Project Path="ClinicApplication.Application/ClinicApplication.Application.csproj" />
+  <Project Path="ClinicApplication.Domain/ClinicApplication.Domain.csproj" />
+  <Project Path="ClinicApplication.Infrastructure/ClinicApplication.Infrastructure.csproj" />
+</Solution>
