@@ -4,8 +4,10 @@
 
 # إعدادات محلية وحساسة
 **/appsettings.Development.json
+*/appsettings.json
 **/appsettings.Local.json
 **/secrets.json
+**/Properties
 .env
 .env.*
 
