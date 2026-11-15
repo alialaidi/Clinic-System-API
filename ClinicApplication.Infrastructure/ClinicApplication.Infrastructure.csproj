@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Exceptions\**" />
     <Compile Remove="Persistence\UnitOfWork\**" />
+    <EmbeddedResource Remove="Exceptions\**" />
     <EmbeddedResource Remove="Persistence\UnitOfWork\**" />
+    <None Remove="Exceptions\**" />
     <None Remove="Persistence\UnitOfWork\**" />
   </ItemGroup>
 
@@ -28,10 +31,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ClinicApplication.Application\ClinicApplication.Application.csproj" />
     <ProjectReference Include="..\ClinicApplication.Domain\ClinicApplication.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>

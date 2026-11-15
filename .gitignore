@@ -2,10 +2,12 @@
 **/bin/
 **/obj/
 **/appsettings.Development.json
+*/appsettings.json
 **/appsettings.Local.json
 **/appsettings.json
 **/Properties
 **/secrets.json
+**/Properties
 .env
 .env.*
 .vs/
