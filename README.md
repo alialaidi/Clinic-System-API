@@ -1,6 +1,6 @@
-# ClinicApplication
+# Iqar Care
 
-ClinicApplication is an ASP.NET Core Web API for coordinating core clinic operations: staff and department administration, client registration, appointment scheduling, consultation records, prescriptions, payments, and client access to personal records.
+Iqar Care is an ASP.NET Core Web API for coordinating core clinic operations: staff and department administration, client registration, appointment scheduling, consultation records, prescriptions, payments, and client access to personal records.
 
 ## Version
 
