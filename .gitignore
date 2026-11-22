@@ -20,3 +20,10 @@
 .DS_Store
 Thumbs.db
 Clinic-System-API
+/dist
+/tmp
+/out-tsc
+/node_modules
+/.angular
+.DS_Store
+Thumbs.db
