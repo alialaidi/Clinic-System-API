@@ -1,0 +1,46 @@
+<main class="login-shell" dir="rtl">
+  <section class="welcome-panel" aria-label="معلومات عن العيادة">
+    <div class="brand"><div class="brand-mark" aria-hidden="true"></div><span>Care<span class="brand-light">Point</span></span></div>
+    <div class="welcome-copy">
+      <span class="eyebrow"><span class="live-dot"></span> رعاية صحية، بلمسة إنسانية</span>
+      <h1>صحتك أولويتنا،<br />في كل خطوة.</h1>
+      <p>منصة واحدة لإدارة الرعاية الصحية ومتابعة رحلتك العلاجية بكل سهولة وأمان.</p>
+    </div>
+    <div class="care-note"><div class="note-icon">✳</div><div><strong>رعاية تثق بها</strong><span>فريقنا هنا لأجلك، دائماً.</span></div><span class="note-arrow">↙</span></div>
+    <div class="panel-orbit orbit-one"></div><div class="panel-orbit orbit-two"></div><div class="panel-cross">+</div>
+  </section>
+  <section class="form-panel">
+    <div class="form-wrap">
+      <div class="mobile-brand brand"><div class="brand-mark" aria-hidden="true"></div><span>Care<span class="brand-light">Point</span></span></div>
+      <div class="form-heading"><span class="section-label">مرحباً بعودتك</span><h2>تسجيل الدخول</h2><p>أدخل بيانات حسابك للمتابعة إلى لوحة التحكم.</p></div>
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+        <div class="field-group">
+          <label for="email">البريد الإلكتروني</label>
+          <div class="input-wrap" [class.invalid]="loginForm.controls.email.invalid && loginForm.controls.email.touched">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="m4 7 8 6 8-6"></path></svg>
+            <input id="email" type="email" formControlName="email" placeholder="name@example.com" autocomplete="username" dir="ltr" />
+          </div>
+          <small class="field-error" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.hasError('required')">البريد الإلكتروني مطلوب.</small>
+          <small class="field-error" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.hasError('email')">أدخل بريداً إلكترونياً صحيحاً.</small>
+        </div>
+        <div class="field-group">
+          <label for="password">كلمة المرور</label>
+          <div class="input-wrap" [class.invalid]="loginForm.controls.password.invalid && loginForm.controls.password.touched">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"></path></svg>
+            <input id="password" [type]="passwordVisible ? 'text' : 'password'" formControlName="password" placeholder="أدخل كلمة المرور" autocomplete="current-password" />
+            <button class="visibility-button" type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="passwordVisible ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'">
+              <svg *ngIf="!passwordVisible" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.2-6 9.5-6 9.5 6 9.5 6-3.2 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+              <svg *ngIf="passwordVisible" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.2A10.8 10.8 0 0 1 12 6c6.3 0 9.5 6 9.5 6a15 15 0 0 1-3 3.6M6.2 6.3C3.8 8 2.5 12 2.5 12s3.2 6 9.5 6c1.4 0 2.6-.3 3.7-.8"></path></svg>
+            </button>
+          </div>
+          <small class="field-error" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">كلمة المرور مطلوبة.</small>
+        </div>
+        <div class="status-message success" role="status" *ngIf="welcomeMessage"><span>{{ welcomeMessage }}</span><span *ngIf="mustChangePassword"> يرجى تغيير كلمة المرور قبل المتابعة.</span></div>
+        <div class="status-message error" role="alert" *ngIf="errorMessage">{{ errorMessage }}</div>
+        <button class="submit-button" type="submit" [disabled]="isSubmitting"><span>{{ isSubmitting ? 'جارٍ تسجيل الدخول...' : 'تسجيل الدخول' }}</span><span class="button-arrow">←</span></button>
+      </form>
+      <p class="security-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 19 6v5c0 4.6-3 8-7 10-4-2-7-5.4-7-10V6l7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg> بياناتك الصحية محمية ومشفّرة</p>
+      <div class="form-footer"><span>© 2026 CarePoint Clinic</span><span>خصوصيتك تهمنا</span></div>
+    </div>
+  </section>
+</main>
